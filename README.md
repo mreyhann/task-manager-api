@@ -1,183 +1,140 @@
+Task Manager API
+
+Task Manager API, kullanıcı kimlik doğrulaması (JWT), görev yönetimi (CRUD) ve SQLite veritabanı kullanan basit ama profesyonel bir backend uygulamasıdır.
+Backend geliştirmeye başlamak ve portföy oluşturmak isteyenler için gerçek bir API yapısına sahiptir.
+
+Özellikler
+
+Kullanıcı kayıt (Register)
+
+Kullanıcı girişi (Login) ve JWT token üretimi
+
+Kimlik doğrulama (JWT Middleware)
+
+Görev oluşturma (Create)
+
+Görev listeleme (Read)
+
+Görev güncelleme (Update)
+
+Görev silme (Delete)
+
+Kullanıcıya ait görevlerin izole şekilde listelenmesi
+
+Güvenli şifre saklama (bcrypt)
+
+SQLite ile kalıcı veri yönetimi
+
+Kullanılan Teknolojiler
+
+Node.js
+
+Express.js
+
+SQLite
+
+JWT (jsonwebtoken)
+
+bcrypt.js
+
+Kurulum
+1. Projeyi klonlayın
+git clone https://github.com/KULLANICI_ADINIZ/task-manager-api.git
+cd task-manager-api
+
+2. Gerekli paketleri yükleyin
+npm install
+
+3. Veritabanı dosyasını sıfırlamak isterseniz
+del task.db   # Windows
+rm task.db    # Mac / Linux
 
 
-#  **README.md
+Yeni dosya uygulama çalıştığında otomatik oluşacaktır.
 
-```md
-#  Task Manager API
-
-Task Manager API, görev oluşturma, listeleme, güncelleme ve silme işlemlerini sağlayan bir RESTful servis örneğidir.  
+4. Sunucuyu başlatın
+node index.js
 
 
----
+Çıktı:
 
-##  Özellikler
+Server çalışıyor → http://localhost:3000
+SQLite veritabanına bağlanıldı.
 
-- Yeni görev oluşturma (POST)
-- Tüm görevleri listeleme (GET)
-- Görev güncelleme (PUT)
-- Görev silme (DELETE)
-- "done" özelliği ile tamamlanma durumu
-- Bellek içi (in-memory) veri yönetimi
-- Express.js ile hızlı API geliştirme
+Kimlik Doğrulama Bilgisi
 
----
+Bu API’de görev oluşturma, listeleme, güncelleme ve silme işlemleri JWT token gerektirir.
 
-##  Kullanılan Teknolojiler
+Header formatı:
 
-- **Node.js**
-- **Express.js**
-- **JavaScript**
+Authorization: Bearer TOKEN
 
----
+API Endpointleri
+Register
 
-##  Proje Yapısı
+POST /register
 
-```
+{
+  "username": "reyhan",
+  "password": "12345"
+}
 
+Login
+
+POST /login
+
+Örnek cevap:
+
+{
+  "token": "eyJhbGciOiJIUzI1NiIsIn..."
+}
+
+Görev Listeleme
+
+GET /tasks
+Sadece giriş yapan kullanıcının görevleri listelenir.
+
+Görev Oluşturma
+
+POST /tasks
+
+{
+  "title": "Alışveriş",
+  "description": "Meyve ve sebze al"
+}
+
+Görev Güncelleme
+
+PUT /tasks/:id
+
+Görev Silme
+
+DELETE /tasks/:id
+
+Proje Yapısı
 task-manager-api/
-│── index.js
-│── package.json
-│── package-lock.json
-│── node_modules/
+│
+├── index.js
+├── database.js
+├── package.json
+├── package-lock.json
+├── .gitignore
 └── README.md
 
-````
+Geliştirme Yol Haritası
 
----
+Görevler için created_at ve updated_at alanlarının eklenmesi
 
-##  Kurulum
+Görev tamamlama durumuna göre filtreleme
 
-### Repoyu klonla
-```bash
-git clone https://github.com/kullaniciadiniz/task-manager-api.git
-cd task-manager-api
-````
+Kullanıcı e-posta doğrulaması
 
-### Bağımlılıkları yükle
+PostgreSQL veya MongoDB'ye geçiş
 
-```bash
-npm install
-```
+Frontend (React) arayüzünün eklenmesi
 
-### Sunucuyu başlat
+Docker ile container yapılandırması
 
-```bash
-node index.js
-```
+Geliştirici
 
-### API çalışıyor!
-
-```
-http://localhost:3000
-```
-
----
-
-## API Endpointleri
-
-###  Tüm görevleri listele
-
-**GET** `/tasks`
-
-**Response:**
-
-```json
-[
-  {
-    "id": 1,
-    "title": "Alışveriş yap",
-    "description": "Market alışverişi",
-    "done": false
-  }
-]
-```
-
----
-
-### Yeni görev ekle
-
-**POST** `/tasks`
-
-**Body:**
-
-```json
-{
-  "title": "Alışveriş yap",
-  "description": "Market alışverişi"
-}
-```
-
-**Response:**
-
-```json
-{
-  "id": 1,
-  "title": "Alışveriş yap",
-  "description": "Market alışverişi",
-  "done": false
-}
-```
-
----
-
-### Görev güncelle
-
-**PUT** `/tasks/:id`
-
-**Body:**
-
-```json
-{
-  "title": "Test görevi güncellendi",
-  "done": true
-}
-```
-
-**Response:**
-
-```json
-{
-  "id": 1,
-  "title": "Test görevi güncellendi",
-  "description": "Market alışverişi",
-  "done": true
-}
-```
-
----
-
-###  Görev sil
-
-**DELETE** `/tasks/:id`
-
-**Response:**
-
-```json
-{
-  "message": "Görev silindi"
-}
-```
-
----
-##  Geliştirme Planı (TODO)
-
-* [ ] Veritabanı bağlantısı ekle (SQLite veya PostgreSQL)
-* [ ] JWT ile kullanıcı doğrulama (auth)
-* [ ] Frontend arayüzü (React)
-* [ ] Loglama ve hata yönetimi
-* [ ] Testler (Jest)
-
----
-
-##  Amaç
-
-Bu proje backend temellerini öğrenmek, Express.js pratik yapmak ve profesyonel bir GitHub portföyü oluşturmak amacıyla geliştirilmiştir.
-
----
-
-```
-
----
-
-
-```
+Meryem Reyhan Dereköy
